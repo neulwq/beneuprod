@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60000" debug="false">
+    <!-- 上下文名称 , 每个logger都关联到上下文 , 默认值为default . 设置之后不可动态修改 -->
+    <contextName>logback</contextName>
+    <!-- 定义变量 , 在配置文件其他地方可通过${变量名}访问 -->
+    <property name="appName" value="beneuprod"/>
+    <property name="logPath" value="./logs"/>
+
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+        <!-- <encoder>
+             <pattern>%d %contextName [%t] %level %logger{36} - %msg%n</pattern>
+         </encoder>-->
+        <encoder>
+            <pattern>%d %-5level - %msg%n</pattern>
+        </encoder>
+        <target>System.out</target>
+    </appender>
+
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logPath}/business.log</file>
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <encoder>
+            <pattern>%d %-5level - %msg%n</pattern>
+        </encoder>
+        <!--滚动策略-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--路径-->
+            <fileNamePattern>${logPath}/business.%d.log</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="file"/>
+        <appender-ref ref="console"/>
+    </root>
+</configuration>
