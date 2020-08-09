@@ -22,9 +22,7 @@ public class SelectSortServiceImpl<T extends Comparable<T>> extends BaseSortServ
             }
             if (minIndex != i) {
                 //swap
-                T value = data[minIndex];
-                data[minIndex] = data[i];
-                data[i] = value;
+                swap(data, i, minIndex);
             }
         }
     }
