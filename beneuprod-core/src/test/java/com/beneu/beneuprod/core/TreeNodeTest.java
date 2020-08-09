@@ -6,6 +6,8 @@ import com.beneu.common.util.log.MessageFormatUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 /**
  * <Description>:
  *
