@@ -1,10 +1,7 @@
 package com.beneu.beneuprod.core;
 
 import com.beneu.beneuprod.core.service.SortService;
-import com.beneu.beneuprod.core.service.impl.InsertSortServiceImpl;
-import com.beneu.beneuprod.core.service.impl.MergeSortServiceImpl;
-import com.beneu.beneuprod.core.service.impl.QuickSortServiceImpl;
-import com.beneu.beneuprod.core.service.impl.UnRecursiveQuickSortServiceImpl;
+import com.beneu.beneuprod.core.service.impl.*;
 import com.beneu.beneuprod.util.ArrayMergeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
@@ -23,10 +20,11 @@ import java.util.Random;
 @Slf4j
 public class ArraySortTest {
 
+    /** 排序的数组 */
+    static Integer[] data = buildArray();
+
     @Test
     public void testQuickSort() {
-        Integer[] data = buildArray();
-
         Integer[] dataCopy = Arrays.copyOf(data, data.length);
         Arrays.sort(dataCopy);
         String sortResult = Arrays.toString(dataCopy);
@@ -48,8 +46,6 @@ public class ArraySortTest {
 
     @Test
     public void testMergeSort() {
-        Integer[] data = buildArray();
-
         Integer[] dataCopy = Arrays.copyOf(data, data.length);
         Arrays.sort(dataCopy);
         String sortResult = Arrays.toString(dataCopy);
@@ -64,8 +60,6 @@ public class ArraySortTest {
 
     @Test
     public void testInsertSort() {
-        Integer[] data = buildArray();
-
         Integer[] dataCopy = Arrays.copyOf(data, data.length);
         Arrays.sort(dataCopy);
         String sortResult = Arrays.toString(dataCopy);
@@ -73,6 +67,36 @@ public class ArraySortTest {
         dataCopy = Arrays.copyOf(data, data.length);
         //插入排序实现
         SortService<Integer> sortService = new InsertSortServiceImpl<>();
+        sortService.sort(dataCopy);
+        log.info(Arrays.toString(dataCopy));
+        Assert.assertEquals(Arrays.toString(dataCopy), sortResult);
+
+    }
+
+    @Test
+    public void testSelectSort() {
+        Integer[] dataCopy = Arrays.copyOf(data, data.length);
+        Arrays.sort(dataCopy);
+        String sortResult = Arrays.toString(dataCopy);
+
+        dataCopy = Arrays.copyOf(data, data.length);
+        //选择排序实现
+        SortService<Integer> sortService = new SelectSortServiceImpl<>();
+        sortService.sort(dataCopy);
+        log.info(Arrays.toString(dataCopy));
+        Assert.assertEquals(Arrays.toString(dataCopy), sortResult);
+
+    }
+
+    @Test
+    public void testBubbleSort() {
+        Integer[] dataCopy = Arrays.copyOf(data, data.length);
+        Arrays.sort(dataCopy);
+        String sortResult = Arrays.toString(dataCopy);
+
+        dataCopy = Arrays.copyOf(data, data.length);
+        //选择排序实现
+        SortService<Integer> sortService = new BubbleSortServiceImpl<>();
         sortService.sort(dataCopy);
         log.info(Arrays.toString(dataCopy));
         Assert.assertEquals(Arrays.toString(dataCopy), sortResult);
@@ -93,7 +117,7 @@ public class ArraySortTest {
      * 构造数组
      * @return
      */
-    protected Integer[] buildArray() {
+    protected static Integer[] buildArray() {
         Integer[] array = new Integer[100];
         Random random = new Random();
         for (int i = 0; i < array.length; i++) {
