@@ -22,40 +22,36 @@ public class QuickSortServiceImpl<T extends Comparable<T>> extends BaseSortServi
     @Override
     public void sort(T[] data, int begin, int end) {
         if (begin < end) {
-            int right = doQuickSort(data, begin, end);
-            //递归左边子树
-            sort(data, begin, right - 1);
-            //递归右边子树
-            sort(data, right + 1, end);
+            int baseIndex = findBaseIndex(data, begin, end);
+            swap(data, begin, baseIndex);
+            //递归左侧
+            sort(data, begin, baseIndex - 1);
+            sort(data, baseIndex + 1, end);
         }
     }
 
     /**
-     * 单趟快排
-     *
+     * 找到base元素的索引
      * @param data
      * @param begin
      * @param end
      * @return
      */
-    protected int doQuickSort(T[] data, int begin, int end) {
-        //以第一个元素作为分界参考值
+    protected int findBaseIndex(T[] data, int begin, int end) {
         T base = data[begin];
         int left = begin;
         int right = end + 1;
         while (true) {
-            //从左边开始遍历找到第一个大于分界值的索引 或者到达end位置
-            while (left < end && data[++left].compareTo(base) <= 0) ;
-            //从右边开始遍历找到第一个小于分界值的索引 或者到达begin位置
-            while (right > begin && data[--right].compareTo(base) >= 0) ;
+            //从left往右遍历，直到找到第一个大于base的位置
+            while (left < end && data[++left].compareTo(base) <= 0);
+            //从right往左遍历，直到找到第一个小于base的位置
+            while (right > begin && data[--right].compareTo(base) >= 0);
             if (left < right) {
                 swap(data, left, right);
             } else {
                 break;
             }
         }
-        swap(data, begin, right);
         return right;
     }
-
 }

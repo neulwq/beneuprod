@@ -26,9 +26,10 @@ public class UnRecursiveQuickSortServiceImpl<T extends Comparable<T>> extends Qu
             int sortEnd = (int) sortNode[2];
 
             if (sortBegin < sortEnd) {
-                int right = doQuickSort(sortData, sortBegin, sortEnd);
-                sortQueue.offer(new Object[]{sortData, sortBegin, right - 1});
-                sortQueue.offer(new Object[]{sortData, right + 1, sortEnd});
+                int baseIndex = findBaseIndex(sortData, sortBegin, sortEnd);
+                swap(sortData, sortBegin, baseIndex);
+                sortQueue.offer(new Object[]{sortData, sortBegin, baseIndex - 1});
+                sortQueue.offer(new Object[]{sortData, baseIndex + 1, sortEnd});
             }
         }
     }
