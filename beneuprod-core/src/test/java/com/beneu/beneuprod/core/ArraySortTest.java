@@ -20,7 +20,9 @@ import java.util.Random;
 @Slf4j
 public class ArraySortTest {
 
-    /** 排序的数组 */
+    /**
+     * 排序的数组
+     */
     static Integer[] data = buildArray();
 
     @Test
@@ -115,15 +117,16 @@ public class ArraySortTest {
 
     /**
      * 构造数组
+     *
      * @return
      */
     protected static Integer[] buildArray() {
-        Integer[] array = new Integer[100];
+        Integer[] array = new Integer[30];
         Random random = new Random();
         for (int i = 0; i < array.length; i++) {
             array[i] = random.nextInt(100);
         }
-        log.info("source array="+ Arrays.toString(array));
+        log.info("source array=" + Arrays.toString(array));
         return array;
     }
 

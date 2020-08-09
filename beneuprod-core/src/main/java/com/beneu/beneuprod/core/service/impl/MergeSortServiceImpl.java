@@ -36,4 +36,40 @@ public class MergeSortServiceImpl<T extends Comparable<T>> extends BaseSortServi
             data[begin + i] = mergeResult[i];
         }
     }
+
+
+    /**
+     * 合并
+     * @param data
+     * @param begin
+     * @param mid
+     * @param end
+     */
+    /**
+    protected void merge(T[] data, int begin, int mid, int end) {
+        T[] result = (T[]) Array.newInstance(data[begin].getClass(), (end - begin + 1));
+        int left = begin;
+        int right = mid + 1;
+        for (int i = 0; i < result.length; i++) {
+            if (left == mid + 1) {
+                //left已经拷贝完成，将right数组剩余元素copy过去即可
+                ArrayMergeUtil.coopyArray(data, result, right, i, (end - right + 1));
+                break;
+            }
+            if (right == end + 1) {
+                //right已经拷贝完成，将left数组剩余元素copy过去即可
+                ArrayMergeUtil.coopyArray(data, result, left, i, (mid - left + 1));
+                break;
+            }
+            if (data[left].compareTo(data[right]) <= 0) {
+                result[i] = data[left++];
+            } else {
+                result[i] = data[right++];
+            }
+        }
+        for (int i = 0; i < result.length; i++) {
+            data[begin++] = result[i];
+        }
+    }
+    **/
 }

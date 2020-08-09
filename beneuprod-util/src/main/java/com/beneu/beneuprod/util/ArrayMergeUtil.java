@@ -89,7 +89,7 @@ public class ArrayMergeUtil {
      * @param tragetBegin
      * @param size
      */
-    protected static <T>  void coopyArray(T[] source, T[] target, int sourceBegin, int tragetBegin, int size) {
+    public static <T>  void coopyArray(T[] source, T[] target, int sourceBegin, int tragetBegin, int size) {
         while(size > 0) {
             target[tragetBegin++] = source[sourceBegin++];
             size--;
