@@ -58,6 +58,30 @@ public class TreeNode<T extends Comparable<T>> {
     }
 
     /**
+     * 返回树的深度
+     *
+     * @return
+     */
+    public int getDepth() {
+        return getDepth(this);
+    }
+
+    /**
+     * 递归获取树深度
+     *
+     * @param tree
+     * @return
+     */
+    protected int getDepth(TreeNode<T> tree) {
+        if (tree == null) {
+            return 0;
+        }
+        int leftDepth = getDepth(tree.left);
+        int rightDepth = getDepth(tree.right);
+        return (leftDepth > rightDepth) ? leftDepth + 1 : rightDepth + 1;
+    }
+
+    /**
      * 广度优先遍历
      *
      * @return

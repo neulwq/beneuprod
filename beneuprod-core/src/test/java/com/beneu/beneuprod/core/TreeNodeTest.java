@@ -6,8 +6,6 @@ import com.beneu.common.util.log.MessageFormatUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
-import java.util.Arrays;
-
 /**
  * <Description>:
  *
@@ -53,6 +51,7 @@ public class TreeNodeTest {
         log.info(MessageFormatUtil.msgFormat("mid    ={0}", JSON.toJSONString(tree.midVisit())));
         log.info(MessageFormatUtil.msgFormat("post   ={0}", JSON.toJSONString(tree.postVisit())));
         log.info(MessageFormatUtil.msgFormat("breadth={0}", JSON.toJSONString(tree.breadthVisit())));
+        log.info(MessageFormatUtil.msgFormat("depth  ={0}", tree.getDepth()));
     }
 
     protected TreeNode<Long> buildTree() {
