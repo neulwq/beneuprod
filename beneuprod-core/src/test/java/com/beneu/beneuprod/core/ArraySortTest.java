@@ -58,6 +58,13 @@ public class ArraySortTest {
         sortService.sort(dataCopy);
         log.info(Arrays.toString(dataCopy));
         Assert.assertEquals(Arrays.toString(dataCopy), sortResult);
+
+        dataCopy = Arrays.copyOf(data, data.length);
+        //归并排序非递归实现
+        sortService = new UnRecursiveMergeSortServiceImpl<>();
+        sortService.sort(dataCopy);
+        log.info(Arrays.toString(dataCopy));
+        Assert.assertEquals(Arrays.toString(dataCopy), sortResult);
     }
 
     @Test
@@ -121,7 +128,7 @@ public class ArraySortTest {
      * @return
      */
     protected static Integer[] buildArray() {
-        Integer[] array = new Integer[30];
+        Integer[] array = new Integer[50];
         Random random = new Random();
         for (int i = 0; i < array.length; i++) {
             array[i] = random.nextInt(100);
