@@ -1,7 +1,6 @@
 package com.beneu.beneuprod.core;
 
 import com.alibaba.fastjson.JSON;
-import com.beneu.beneuprod.core.model.LevelTreeNode;
 import com.beneu.beneuprod.core.model.TreeNode;
 import com.beneu.common.util.log.MessageFormatUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +20,7 @@ public class TreeTest {
 
     @Test
     public void testTreeNode() {
-        TreeNode<Integer> tree = new TreeNode<Integer>(9);
+        TreeNode<Integer> tree = new TreeNode<Integer>(9, 0);
         tree.add(new Integer[] {5,3,2,4,7,6,8,13,11,10,12,15,14,16});
         visitTree(tree);
         log.info("镜像操作");
@@ -36,8 +35,8 @@ public class TreeTest {
 
     @Test
     public void testLevelTreeNode() {
-        TreeNode<Integer> tree = new LevelTreeNode<Integer>(9, 0);
-        tree.add(new Integer[] {5,3,2,4,7,6,8,13,11,10,12,15,14,16});
+        TreeNode<Integer> tree = new TreeNode<Integer>(9, 0);
+        tree.add(new Integer[] {5,3,2,4,7,8,13,15,16});
 
         List<List<TreeNode<Integer>>> wideList = tree.breadthLevelVisit();
         for (List<TreeNode<Integer>> nodes : wideList) {
@@ -49,11 +48,9 @@ public class TreeTest {
             log.info(MessageFormatUtil.msgFormat("level nodes={0}", JSON.toJSONString(nodes)));
         }
 
-        log.info("\n" + tree.view());
+        log.info("\n" + tree.treeView());
 
     }
-
-
 
     /**
      * 遍历树
