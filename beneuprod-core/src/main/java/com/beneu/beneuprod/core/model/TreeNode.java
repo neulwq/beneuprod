@@ -1,7 +1,11 @@
 package com.beneu.beneuprod.core.model;
 
+import com.alibaba.fastjson.JSON;
+import com.beneu.common.util.log.MessageFormatUtil;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+import org.apache.commons.lang3.builder.ToStringExclude;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -15,18 +19,21 @@ import java.util.Queue;
  * @version 1.0
  * @createDate 2020/8/6 22:40
  */
-@Getter
 @Setter
+@Getter
 public class TreeNode<T extends Comparable<T>> {
 
     /** 节点的值 **/
-    private T value;
+    protected T value;
 
     /** 左子树 */
-    private TreeNode<T> left;
+    protected transient TreeNode<T> left;
 
     /** 右子树 */
-    private TreeNode<T> right;
+    protected transient TreeNode<T> right;
+
+    /** 构造函数 */
+    public TreeNode() {}
 
     /** 构造函数 */
     public TreeNode(T value) {
@@ -34,27 +41,108 @@ public class TreeNode<T extends Comparable<T>> {
     }
 
     /**
-     * 前序遍历
+     * 可视化
+     *
      * @return
      */
-    public List<T> preVisit() {
-        return preVisitTree(this);
+    public String view() {
+        //未实现
+        return null;
     }
 
     /**
-     * 中序遍历
+     * 按层级遍历
+     *
      * @return
      */
-    public List<T> midVisit() {
-        return midVisitTree(this);
+    public List<List<TreeNode<T>>> breadthLevelVisitWithFill() {
+        TreeNode<T> tree = deepClone();
+        List<List<TreeNode<T>>> wideList = new ArrayList<>();
+        for (int i = 0; i < maxDepth(); i++) {
+            wideList.add(new ArrayList<>());
+        }
+
+        int maxLevel = tree.maxDepth() - 1;
+        Queue<TreeNode<T>> queue = new ArrayDeque<>();
+        queue.offer(tree);
+
+        for (TreeNode<T> node = queue.poll(); node != null; node = queue.poll()) {
+            wideList.get(node.currentLevel()).add(node);
+            if (node.left == null && node.currentLevel() < maxLevel) {
+                node.add2Left(null);
+            }
+            if (node.left != null) {
+                queue.offer(node.left);
+            }
+            if (node.right == null && node.currentLevel() < maxLevel) {
+                node.add2Right(null);
+            }
+            if (node.right != null) {
+                queue.offer(node.right);
+            }
+        }
+        return wideList;
+    }
+
+
+    /**
+     * 按层级遍历
+     *
+     * @return
+     */
+    public List<List<TreeNode<T>>> breadthLevelVisit() {
+        List<List<TreeNode<T>>> wideList = new ArrayList<>();
+        for (int i = 0; i < maxDepth(); i++) {
+            wideList.add(new ArrayList<>());
+        }
+
+        Queue<TreeNode<T>> queue = new ArrayDeque<>();
+        queue.offer(this);
+
+        for (TreeNode<T> node = queue.poll(); node != null; node = queue.poll()) {
+            wideList.get(node.currentLevel()).add(node);
+            if (node.left != null) {
+                queue.offer(node.left);
+            }
+            if (node.right != null) {
+                queue.offer(node.right);
+            }
+        }
+        return wideList;
     }
 
     /**
-     * 后序遍历
+     * 当前的层级
+     *
      * @return
      */
-    public List<T> postVisit() {
-        return postVisitTree(this);
+    protected int currentLevel() {
+        return 0;
+    }
+
+    /**
+     * 深拷贝
+     *
+     * @return
+     */
+    public TreeNode<T> deepClone() {
+        TreeNode<T> treeNode = shallowClone();
+        if (this.left != null) {
+            treeNode.left = this.left.deepClone();
+        }
+        if (this.right != null) {
+            treeNode.right = this.right.deepClone();
+        }
+        return treeNode;
+    }
+
+    /**
+     * 浅拷贝
+     *
+     * @return
+     */
+    protected TreeNode<T> shallowClone() {
+        return new TreeNode<>(value);
     }
 
     /**
@@ -62,23 +150,8 @@ public class TreeNode<T extends Comparable<T>> {
      *
      * @return
      */
-    public int getDepth() {
-        return getDepth(this);
-    }
-
-    /**
-     * 递归获取树深度
-     *
-     * @param tree
-     * @return
-     */
-    protected int getDepth(TreeNode<T> tree) {
-        if (tree == null) {
-            return 0;
-        }
-        int leftDepth = getDepth(tree.left);
-        int rightDepth = getDepth(tree.right);
-        return (leftDepth > rightDepth) ? leftDepth + 1 : rightDepth + 1;
+    public int maxDepth() {
+        return Math.max(left == null ? 0 : left.maxDepth(), right == null ? 0 : right.maxDepth()) + 1;
     }
 
     /**
@@ -86,13 +159,13 @@ public class TreeNode<T extends Comparable<T>> {
      *
      * @return
      */
-    public List<T> breadthVisit() {
-        List<T> values = new ArrayList<>();
+    public List<TreeNode<T>> breadthVisit() {
+        List<TreeNode<T>> values = new ArrayList<>();
         Queue<TreeNode<T>> queue = new ArrayDeque<>();
         queue.offer(this);
 
         for (TreeNode<T> visitNode = queue.poll(); visitNode != null; visitNode = queue.poll()) {
-            values.add(visitNode.value);
+            values.add(visitNode);
             if (visitNode.left != null) {
                 queue.offer(visitNode.left);
             }
@@ -125,6 +198,18 @@ public class TreeNode<T extends Comparable<T>> {
     }
 
     /**
+     * 添加数组
+     *
+     * @param array
+     */
+    public void add(T[] array) {
+        for (T value : array) {
+            add(value);
+        }
+    }
+
+
+    /**
      * 添加元素
      *
      * @param value
@@ -134,14 +219,30 @@ public class TreeNode<T extends Comparable<T>> {
         if (value.compareTo(this.value) == 0) {
             return this;
         }
-        if (value.compareTo(this.value) < 0) {
-            if (this.left == null) {
-                this.left = new TreeNode<>(value);
-                return this.left;
-            }
-            return this.left.add(value);
-        }
+        return value.compareTo(this.value) < 0 ? add2Left(value) : add2Right(value);
+    }
 
+    /**
+     * 往左子树添加
+     *
+     * @param value
+     * @return
+     */
+    protected TreeNode<T> add2Left(T value) {
+        if (this.left == null) {
+            this.left = new TreeNode<>(value);
+            return this.left;
+        }
+        return this.left.add(value);
+    }
+
+    /**
+     * 往右子树添加
+     *
+     * @param value
+     * @return
+     */
+    protected TreeNode<T> add2Right(T value) {
         if (this.right == null) {
             this.right = new TreeNode<>(value);
             return this.right;
@@ -151,82 +252,99 @@ public class TreeNode<T extends Comparable<T>> {
 
     /**
      * 递归镜像
+     *
+     * @param
      */
-    public void noBreadthMirror() {
-        recursiveMirror(this);
+    public void recursiveMirror() {
+        if (this.left != null) {
+            this.left.recursiveMirror();
+        }
+
+        if (this.right != null) {
+            this.right.recursiveMirror();
+        }
+
+        TreeNode<T> leftNode = this.left;
+        //左右反转
+        this.setLeft(this.right);
+        this.setRight(leftNode);
     }
 
     /**
-     * 递归镜像
-     *
-     * @param tree
+     * 前序遍历
+     * @return
      */
-    protected void recursiveMirror(TreeNode<T> tree) {
-        if (tree.left != null) {
-            recursiveMirror(tree.left);
-        }
+    public List<TreeNode<T>> preVisit() {
+        List<TreeNode<T>> list = new ArrayList<>();
+        preVisitTree(list);
+        return list;
+    }
 
-        if (tree.right != null) {
-            recursiveMirror(tree.right);
-        }
+    /**
+     * 中序遍历
+     * @return
+     */
+    public List<TreeNode<T>> midVisit() {
+        List<TreeNode<T>> list = new ArrayList<>();
+        midVisitTree(list);
+        return list;
+    }
 
-        TreeNode<T> leftNode = tree.left;
-        //左右反转
-        tree.setLeft(tree.right);
-        tree.setRight(leftNode);
+    /**
+     * 后序遍历
+     * @return
+     */
+    public List<TreeNode<T>> postVisit() {
+        List<TreeNode<T>> list = new ArrayList<>();
+        postVisitTree(list);
+        return list;
     }
 
     /**
      * 前序递归
      *
-     * @param tree
+     * @param list
      * @return
      */
-    protected List<T> preVisitTree(TreeNode<T> tree) {
-        List<T> values = new ArrayList<>();
-        values.add(tree.getValue());
-        if (tree.left != null) {
-            values.addAll(preVisitTree(tree.left));
+    protected void preVisitTree(List<TreeNode<T>> list) {
+        list.add(this);
+        if (this.left != null) {
+            this.left.preVisitTree(list);
         }
-        if (tree.right != null) {
-            values.addAll(preVisitTree(tree.right));
+        if (this.right != null) {
+            this.right.preVisitTree(list);
         }
-        return values;
     }
 
     /**
      * 中序递归
      *
-     * @param tree
+     * @param list
      * @return
      */
-    protected List<T> midVisitTree(TreeNode<T> tree) {
-        List<T> values = new ArrayList<>();
-        if (tree.left != null) {
-            values.addAll(midVisitTree(tree.left));
+    protected void midVisitTree(List<TreeNode<T>> list) {
+        if (this.left != null) {
+            this.left.midVisitTree(list);
         }
-        values.add(tree.getValue());
-        if (tree.right != null) {
-            values.addAll(midVisitTree(tree.right));
+        list.add(this);
+        if (this.right != null) {
+            this.right.midVisitTree(list);
         }
-        return values;
     }
 
     /**
      * 后序递归
      *
-     * @param tree
+     * @param list
      * @return
      */
-    protected List<T> postVisitTree(TreeNode<T> tree) {
-        List<T> values = new ArrayList<>();
-        if (tree.left != null) {
-            values.addAll(postVisitTree(tree.left));
+    protected void postVisitTree(List<TreeNode<T>> list) {
+        if (this.left != null) {
+            this.left.postVisitTree(list);
         }
-        if (tree.right != null) {
-            values.addAll(postVisitTree(tree.right));
+        if (this.right != null) {
+            this.right.postVisitTree(list);
         }
-        values.add(tree.getValue());
-        return values;
+        list.add(this);
     }
 }

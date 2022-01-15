@@ -128,7 +128,7 @@ public class ArraySortTest {
      * @return
      */
     protected static Integer[] buildArray() {
-        Integer[] array = new Integer[50];
+        Integer[] array = new Integer[16];
         Random random = new Random();
         for (int i = 0; i < array.length; i++) {
             array[i] = random.nextInt(100);

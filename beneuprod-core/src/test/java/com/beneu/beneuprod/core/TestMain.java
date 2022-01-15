@@ -1,4 +1,4 @@
-package com.beneu.beneuprod.deploy;
+package com.beneu.beneuprod.core;
 
 import com.alibaba.fastjson.JSON;
 import org.junit.Test;
@@ -18,6 +18,11 @@ public class TestMain {
         int[] array_2 = {2, 3, 5, 6};
         int[] result = sort(array_1, array_2);
         System.out.println(JSON.toJSON(result));
+
+        System.out.println(1.2d - 1d < 0.2d);
+        System.out.println(30d/ 20d);
+        System.out.println(3d / 2d);
+
     }
 
     public int[] sort(int[] array_1, int[] array_2) {
