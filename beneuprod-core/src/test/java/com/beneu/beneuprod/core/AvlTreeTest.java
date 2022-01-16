@@ -1,6 +1,8 @@
 package com.beneu.beneuprod.core;
 
 import com.alibaba.fastjson.JSON;
+import com.beneu.beneuprod.core.model.AvlTree;
+import com.beneu.beneuprod.core.model.AvlTreeNode;
 import com.beneu.beneuprod.core.model.TreeNode;
 import com.beneu.common.util.log.MessageFormatUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -13,45 +15,34 @@ import java.util.List;
  *
  * @author beneu
  * @version 1.0
- * @createDate 2020/8/7 22:57
+ * @createDate 2022/1/15 23:11
  */
 @Slf4j
-public class TreeTest {
-
-    @Test
-    public void testTreeNode() {
-        TreeNode<Integer> tree = new TreeNode<Integer>(9, 0);
-        tree.add(new Integer[] {5,3,2,4,7,6,8,13,11,10,12,15,14,16});
-        visitTree(tree);
-        log.info("镜像操作");
-        //反转
-        tree.breadthMirror();
-        visitTree(tree);
-        log.info("再镜像操作");
-        //再反转
-        tree.recursiveMirror();
-        visitTree(tree);
-    }
+public class AvlTreeTest {
 
     @Test
     public void testLevelTreeNode() {
-        TreeNode<Integer> tree = new TreeNode<Integer>(9, 0);
-        tree.add(new Integer[] {5,13,3,7,11,15,2,4,6,8,10,12,14,16});
+        AvlTree<Integer> tree = new AvlTree<Integer>();
+        tree.add(new Integer[] {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24});
+        visitTree(tree);
 
-        List<List<TreeNode<Integer>>> wideList = tree.breadthLevelVisit();
-        for (List<TreeNode<Integer>> nodes : wideList) {
+        List<List<AvlTreeNode<Integer>>> wideList = tree.breadthLevelVisit();
+        for (List<AvlTreeNode<Integer>> nodes : wideList) {
             log.info(MessageFormatUtil.msgFormat("level nodes={0}", JSON.toJSONString(nodes)));
         }
 
         wideList = tree.breadthLevelVisitWithFill();
-        for (List<TreeNode<Integer>> nodes : wideList) {
+        for (List<AvlTreeNode<Integer>> nodes : wideList) {
             log.info(MessageFormatUtil.msgFormat("level nodes={0}", JSON.toJSONString(nodes)));
         }
 
         log.info("\n" + tree.treeView());
 
-        tree.add(17);
-        tree.add(18);
+        tree.add(25);
+        tree.add(26);
+        tree.add(27);
+        tree.add(28);
+
 
 
         log.info("\n" + tree.treeView());
@@ -63,12 +54,11 @@ public class TreeTest {
      *
      * @param tree
      */
-    protected <T extends Comparable<T>> void visitTree(TreeNode<T> tree) {
+    protected <T extends Comparable<T>> void visitTree(AvlTree<T> tree) {
         log.info(MessageFormatUtil.msgFormat("pre    ={0}", JSON.toJSONString(tree.preVisit())));
         log.info(MessageFormatUtil.msgFormat("mid    ={0}", JSON.toJSONString(tree.midVisit())));
         log.info(MessageFormatUtil.msgFormat("post   ={0}", JSON.toJSONString(tree.postVisit())));
         log.info(MessageFormatUtil.msgFormat("breadth={0}", JSON.toJSONString(tree.breadthVisit())));
         log.info(MessageFormatUtil.msgFormat("depth  ={0}", tree.height()));
     }
-
 }

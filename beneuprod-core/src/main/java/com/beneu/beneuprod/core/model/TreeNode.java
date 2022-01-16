@@ -1,12 +1,8 @@
 package com.beneu.beneuprod.core.model;
 
-import com.alibaba.fastjson.JSON;
-import com.beneu.common.util.log.MessageFormatUtil;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.ToStringExclude;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -25,7 +21,7 @@ import java.util.Queue;
 public class TreeNode<T extends Comparable<T>> {
 
     /** 节点间隔 */
-    private transient final static int gap = 4;
+    private transient final static int gap = 2;
 
     /** 节点位数 */
     private transient final static int nodeSize = 2;
@@ -33,8 +29,11 @@ public class TreeNode<T extends Comparable<T>> {
     /** 横标 */
     private transient final static String ROW_TAG = "_";
 
-    /** 空标 */
-    private transient final static String ENPTY_TAG = " ";
+    /** 空格标 */
+    private transient final static String SPACE_TAG = " ";
+
+    /** 空 */
+    private transient final static String EMPTY_TAG = "";
 
     /** 树层级 **/
     private int level;
@@ -91,29 +90,32 @@ public class TreeNode<T extends Comparable<T>> {
             for (TreeNode<T> node : levelNodes) {
                 boolean emptyNode = (node.value == null);
                 valueBuilder.append(emptyString(node.index - levelIndex)).append(emptyNode ? emptyString(nodeSize) : format(node.value));
-                colBuilder.append(emptyString(node.index - levelIndex)).append(emptyNode ? emptyString(nodeSize) : StringUtils.rightPad("|", nodeSize, ENPTY_TAG));
+                colBuilder.append(emptyString(node.index - levelIndex)).append(emptyNode ? emptyString(nodeSize) : StringUtils.rightPad("|", nodeSize, SPACE_TAG));
                 rowBuilder.append(emptyString(node.index - rowIndex));
 
                 if (isNotEmpty(node.left)) {
                     rowBuilder.setLength(node.left.index + 1);
-                    rowBuilder.append(StringUtils.rightPad(ROW_TAG, node.index - node.left.index - 1, ROW_TAG));
+                    rowBuilder.append(StringUtils.rightPad(EMPTY_TAG, node.index - node.left.index - 1, ROW_TAG));
                 }
                 if (isNotEmpty(node.left) || isNotEmpty(node.right)) {
-                    rowBuilder.append(StringUtils.rightPad(ROW_TAG, nodeSize, ROW_TAG));
+                    rowBuilder.append(StringUtils.rightPad(EMPTY_TAG, nodeSize, ROW_TAG));
                 } else {
                     rowBuilder.append(emptyString(nodeSize));
                 }
                 if (isNotEmpty(node.right)) {
-                    rowBuilder.append(StringUtils.rightPad(ROW_TAG, node.right.index - node.index - nodeSize, ROW_TAG));
+                    rowBuilder.append(StringUtils.rightPad(EMPTY_TAG, node.right.index - node.index - nodeSize, ROW_TAG));
                 }
 
                 rowIndex = rowBuilder.length();
                 levelIndex = valueBuilder.length();
 
             }
+            /*
             System.out.println(colBuilder.toString());
             System.out.println(valueBuilder.toString());
             System.out.println(rowBuilder.toString());
+             */
+
             //打印竖线
             builder.append(colBuilder.toString()).append("\n");
             //打印节点值
@@ -144,11 +146,11 @@ public class TreeNode<T extends Comparable<T>> {
     public List<List<TreeNode<T>>> breadthLevelVisitWithFill() {
         TreeNode<T> tree = deepClone();
         List<List<TreeNode<T>>> wideList = new ArrayList<>();
-        for (int i = 0; i < maxDepth(); i++) {
+        for (int i = 0; i < height(); i++) {
             wideList.add(new ArrayList<>());
         }
 
-        int maxLevel = tree.maxDepth() - 1;
+        int maxLevel = tree.height() - 1;
         Queue<TreeNode<T>> queue = new ArrayDeque<>();
         queue.offer(tree);
 
@@ -178,7 +180,7 @@ public class TreeNode<T extends Comparable<T>> {
      */
     public List<List<TreeNode<T>>> breadthLevelVisit() {
         List<List<TreeNode<T>>> wideList = new ArrayList<>();
-        for (int i = 0; i < maxDepth(); i++) {
+        for (int i = 0; i < height(); i++) {
             wideList.add(new ArrayList<>());
         }
 
@@ -236,8 +238,8 @@ public class TreeNode<T extends Comparable<T>> {
      *
      * @return
      */
-    public int maxDepth() {
-        return Math.max(left == null ? 0 : left.maxDepth(), right == null ? 0 : right.maxDepth()) + 1;
+    public int height() {
+        return Math.max(left == null ? 0 : left.height(), right == null ? 0 : right.height()) + 1;
     }
 
     /**
@@ -435,7 +437,7 @@ public class TreeNode<T extends Comparable<T>> {
     }
 
     protected String emptyString(int size) {
-        return StringUtils.leftPad("", size, ENPTY_TAG);
+        return StringUtils.leftPad(EMPTY_TAG, size, SPACE_TAG);
     }
 
     protected String format(T value) {
