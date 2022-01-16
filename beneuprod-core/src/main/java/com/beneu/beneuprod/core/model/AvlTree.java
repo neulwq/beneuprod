@@ -136,25 +136,25 @@ public class AvlTree<T extends Comparable<T>> {
         AvlTreeNode<T> tree = deepClone(root);
         tree.level = 0;
         List<List<AvlTreeNode<T>>> wideList = new ArrayList<>();
-        for (int i = 0; i < height(tree); i++) {
+        for (int i = 0; i <= height(tree); i++) {
             wideList.add(new ArrayList<>());
         }
 
-        int maxLevel = height(tree) - 1;
+        int maxLevel = height(tree);
         Queue<AvlTreeNode<T>> queue = new ArrayDeque<>();
         queue.offer(tree);
 
         for (AvlTreeNode<T> node = queue.poll(); node != null; node = queue.poll()) {
             wideList.get(node.level).add(node);
             if (node.left == null && node.level < maxLevel) {
-                node.left = new AvlTreeNode<>(null);
+                node.left = new AvlTreeNode<>(null, node.height - 1);
             }
             if (node.left != null) {
                 node.left.level = node.level + 1;
                 queue.offer(node.left);
             }
             if (node.right == null && node.level < maxLevel) {
-                node.right = new AvlTreeNode<>(null);
+                node.right = new AvlTreeNode<>(null, node.height - 1);
             }
             if (node.right != null) {
                 node.right.level = node.level + 1;
@@ -173,7 +173,7 @@ public class AvlTree<T extends Comparable<T>> {
         AvlTreeNode<T> tree = deepClone(root);
         tree.level = 0;
         List<List<AvlTreeNode<T>>> wideList = new ArrayList<>();
-        for (int i = 0; i < height(); i++) {
+        for (int i = 0; i <= height(); i++) {
             wideList.add(new ArrayList<>());
         }
 
@@ -217,7 +217,7 @@ public class AvlTree<T extends Comparable<T>> {
      * @return
      */
     protected AvlTreeNode<T> shallowClone(AvlTreeNode<T> node) {
-        AvlTreeNode<T> clonNode = new AvlTreeNode<>(node.value);
+        AvlTreeNode<T> clonNode = new AvlTreeNode<>(node.value, node.height);
         clonNode.level = node.level;
         return clonNode;
     }
@@ -238,9 +238,10 @@ public class AvlTree<T extends Comparable<T>> {
      */
     protected int height(AvlTreeNode<T> node) {
         if (node == null) {
-            return 0;
+            //叶子节点树高为0
+            return -1;
         }
-        return Math.max(height(node.left), height(node.right)) + 1;
+        return node.height;
     }
 
     /**
@@ -303,11 +304,6 @@ public class AvlTree<T extends Comparable<T>> {
      * @param value
      */
     public void add(T value) {
-        if (root == null) {
-            // 新建节点
-            root = new AvlTreeNode<T>(value);
-            return;
-        }
         root = add(root, value);
         log.info("add:" + value + ";\n" + this.treeView());
     }
@@ -320,10 +316,14 @@ public class AvlTree<T extends Comparable<T>> {
      * @return
      */
     protected AvlTreeNode<T> add(AvlTreeNode<T> node, T value) {
+        if (node == null) {
+            return new AvlTreeNode<>(value, 0);
+        }
+
         if (value.compareTo(node.value) < 0) {
-            node.left = (node.left == null) ? new AvlTreeNode<>(value) : add(node.left, value);
+            node.left = add(node.left, value);
         } else if (value.compareTo(node.value) > 0) {
-            node.right = (node.right == null) ? new AvlTreeNode<>(value) : add(node.right, value);
+            node.right = add(node.right, value);
         }
         node = balance(node);
         return node;
@@ -444,45 +444,52 @@ public class AvlTree<T extends Comparable<T>> {
         }
         if (height(node.left) - height(node.right) > 1) {
             if(height(node.left.left) >= height(node.left.right)) {
-                node = rotateRight(node);
+                node = LL(node);
             } else {
                 node = LR(node);
             }
         }else if(height(node.right) - height(node.left) > 1) {
             if(height(node.right.right) >= height(node.right.left)) {
-                node = rotateLeft(node);
+                node = RR(node);
             } else {
                 node = RL(node);
             }
         }
+        node.height = Math.max(height(node.left), height(node.right)) + 1;
         return node;
     }
 
     //LL情况
-    protected AvlTreeNode<T> rotateRight(AvlTreeNode<T> node) {
+    protected AvlTreeNode<T> LL(AvlTreeNode<T> node) {
         AvlTreeNode<T> temp = node.left;
         node.left = temp.right;
         temp.right = node;
+
+        node.height = Math.max(height(node.left), height(node.right)) + 1;
+        temp.height = Math.max(height(temp.left), height(temp.right)) + 1;
         return temp;
     }
 
     //RR情况
-    protected AvlTreeNode<T> rotateLeft(AvlTreeNode<T> node) {
+    protected AvlTreeNode<T> RR(AvlTreeNode<T> node) {
         AvlTreeNode<T> temp = node.right;
         node.right = temp.left;
         temp.left = node;
+
+        node.height = Math.max(height(node.left), height(node.right)) + 1;
+        temp.height = Math.max(height(temp.left), height(temp.right)) + 1;
         return temp;
     }
 
     //LR情况
     protected AvlTreeNode<T> LR(AvlTreeNode<T> node) {
-        node.left = rotateLeft(node.left);
-        return rotateRight(node);
+        node.left = RR(node.left);
+        return LL(node);
     }
 
     //RL情况
     protected AvlTreeNode<T> RL(AvlTreeNode<T> node) {
-        node.right = rotateRight(node.right);
-        return rotateLeft(node);
+        node.right = LL(node.right);
+        return RR(node);
     }
 }

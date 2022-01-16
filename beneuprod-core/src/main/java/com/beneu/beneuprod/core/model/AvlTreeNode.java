@@ -17,6 +17,9 @@ public class AvlTreeNode<T extends Comparable<T>> {
     /** 树层级,可视化时使用 **/
     protected int level;
 
+    /** 树高，叶子节点树高为0 */
+    protected transient int height;
+
     /** 位置偏移，可视化时使用 */
     protected transient int index;
 
@@ -30,7 +33,8 @@ public class AvlTreeNode<T extends Comparable<T>> {
     protected transient AvlTreeNode<T> right;
 
     /** 构造函数 */
-    public AvlTreeNode(T value) {
+    public AvlTreeNode(T value, int height) {
         this.value = value;
+        this.height = height;
     }
 }
