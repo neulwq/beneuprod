@@ -42,6 +42,9 @@ public class AvlTreeTest {
         tree.add(26);
         tree.add(27);
         tree.add(28);
+        tree.add(29);
+        tree.add(30);
+        tree.add(31);
 
 
 

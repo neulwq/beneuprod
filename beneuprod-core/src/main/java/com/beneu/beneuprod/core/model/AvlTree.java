@@ -304,8 +304,9 @@ public class AvlTree<T extends Comparable<T>> {
      * @param value
      */
     public void add(T value) {
+        log.info("add:" + value);
         root = add(root, value);
-        log.info("add:" + value + ";\n" + this.treeView());
+        log.info("\n" + this.treeView());
     }
 
 
@@ -461,6 +462,7 @@ public class AvlTree<T extends Comparable<T>> {
 
     //LL情况
     protected AvlTreeNode<T> LL(AvlTreeNode<T> node) {
+        log.info("LL:" + node.value);
         AvlTreeNode<T> temp = node.left;
         node.left = temp.right;
         temp.right = node;
@@ -472,6 +474,7 @@ public class AvlTree<T extends Comparable<T>> {
 
     //RR情况
     protected AvlTreeNode<T> RR(AvlTreeNode<T> node) {
+        log.info("RR:" + node.value);
         AvlTreeNode<T> temp = node.right;
         node.right = temp.left;
         temp.left = node;
@@ -483,12 +486,14 @@ public class AvlTree<T extends Comparable<T>> {
 
     //LR情况
     protected AvlTreeNode<T> LR(AvlTreeNode<T> node) {
+        log.info("LR:" + node.value);
         node.left = RR(node.left);
         return LL(node);
     }
 
     //RL情况
     protected AvlTreeNode<T> RL(AvlTreeNode<T> node) {
+        log.info("RL:" + node.value);
         node.right = LL(node.right);
         return RR(node);
     }
