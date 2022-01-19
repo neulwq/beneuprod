@@ -43,6 +43,54 @@ public class BinaryTree<T extends Comparable<T>> {
     }
 
     /**
+     * 广度优先镜像操作
+     */
+    public void breadthMirror() {
+        Queue<BinaryTreeNode<T>> queue = new ArrayDeque<>();
+        queue.offer(root);
+
+        for (BinaryTreeNode<T> visitNode = queue.poll(); visitNode != null; visitNode = queue.poll()) {
+            if (visitNode.left != null) {
+                queue.offer(visitNode.left);
+            }
+            if (visitNode.right != null) {
+                queue.offer(visitNode.right);
+            }
+            BinaryTreeNode<T> leftNode = visitNode.left;
+            //左右反转
+            visitNode.setLeft(visitNode.right);
+            visitNode.setRight(leftNode);
+        }
+    }
+
+    /**
+     * 递归镜像
+     */
+    public void recursiveMirror() {
+        recursiveMirror(root);
+    }
+
+    /**
+     * 递归镜像
+     *
+     * @param
+     */
+    protected void recursiveMirror(BinaryTreeNode<T> node) {
+        if (node.left != null) {
+            recursiveMirror(node.left);
+        }
+
+        if (node.right != null) {
+            recursiveMirror(node.right);
+        }
+
+        BinaryTreeNode<T> leftNode = node.left;
+        //左右反转
+        node.setLeft(node.right);
+        node.setRight(leftNode);
+    }
+
+    /**
      * 广度优先遍历
      *
      * @return

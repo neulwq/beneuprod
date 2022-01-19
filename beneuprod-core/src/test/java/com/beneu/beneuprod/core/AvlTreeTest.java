@@ -49,6 +49,14 @@ public class AvlTreeTest {
 
         log.info("\n" + tree.treeView());
 
+        tree.breadthMirror();
+
+        log.info("\n" + tree.treeView());
+
+        tree.recursiveMirror();
+
+        log.info("\n" + tree.treeView());
+
     }
 
     /**

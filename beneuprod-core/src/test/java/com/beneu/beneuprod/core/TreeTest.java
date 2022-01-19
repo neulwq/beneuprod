@@ -1,6 +1,7 @@
 package com.beneu.beneuprod.core;
 
 import com.alibaba.fastjson.JSON;
+import com.beneu.beneuprod.core.model.BinaryTree;
 import com.beneu.common.util.log.MessageFormatUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -19,8 +20,8 @@ public class TreeTest {
 
     @Test
     public void testTreeNode() {
-        TreeNode<Integer> tree = new TreeNode<Integer>(9, 0);
-        tree.add(new Integer[] {5,3,2,4,7,6,8,13,11,10,12,15,14,16});
+        BinaryTree<Integer> tree = new BinaryTree<Integer>();
+        tree.add(new Integer[] {9, 5,3,2,4,7,6,8,13,11,10,12,15,14,16});
         visitTree(tree);
         log.info("镜像操作");
         //反转
@@ -32,37 +33,12 @@ public class TreeTest {
         visitTree(tree);
     }
 
-    @Test
-    public void testLevelTreeNode() {
-        TreeNode<Integer> tree = new TreeNode<Integer>(9, 0);
-        tree.add(new Integer[] {5,13,3,7,11,15,2,4,6,8,10,12,14,16});
-
-        List<List<TreeNode<Integer>>> wideList = tree.breadthLevelVisit();
-        for (List<TreeNode<Integer>> nodes : wideList) {
-            log.info(MessageFormatUtil.msgFormat("level nodes={0}", JSON.toJSONString(nodes)));
-        }
-
-        wideList = tree.breadthLevelVisitWithFill();
-        for (List<TreeNode<Integer>> nodes : wideList) {
-            log.info(MessageFormatUtil.msgFormat("level nodes={0}", JSON.toJSONString(nodes)));
-        }
-
-        log.info("\n" + tree.treeView());
-
-        tree.add(17);
-        tree.add(18);
-
-
-        log.info("\n" + tree.treeView());
-
-    }
-
     /**
      * 遍历树
      *
      * @param tree
      */
-    protected <T extends Comparable<T>> void visitTree(TreeNode<T> tree) {
+    protected <T extends Comparable<T>> void visitTree(BinaryTree<T> tree) {
         log.info(MessageFormatUtil.msgFormat("pre    ={0}", JSON.toJSONString(tree.preVisit())));
         log.info(MessageFormatUtil.msgFormat("mid    ={0}", JSON.toJSONString(tree.midVisit())));
         log.info(MessageFormatUtil.msgFormat("post   ={0}", JSON.toJSONString(tree.postVisit())));
