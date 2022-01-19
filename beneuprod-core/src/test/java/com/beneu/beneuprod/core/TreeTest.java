@@ -1,7 +1,6 @@
 package com.beneu.beneuprod.core;
 
 import com.alibaba.fastjson.JSON;
-import com.beneu.beneuprod.core.model.TreeNode;
 import com.beneu.common.util.log.MessageFormatUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;

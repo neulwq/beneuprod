@@ -19,10 +19,10 @@ import java.util.Queue;
 public class AvlTree<T extends Comparable<T>> {
 
     /** 节点间隔 */
-    private transient final static int gap = 2;
+    private transient final static int gap = 3;
 
     /** 节点位数 */
-    private transient final static int nodeSize = 2;
+    private transient final static int nodeSize = 3;
 
     /** 横标 */
     private transient final static String ROW_TAG = "_";
