@@ -6,7 +6,10 @@ import com.beneu.common.util.log.MessageFormatUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * <Description>:
@@ -31,6 +34,7 @@ public class TreeTest {
         //再反转
         tree.recursiveMirror();
         visitTree(tree);
+
     }
 
     /**
