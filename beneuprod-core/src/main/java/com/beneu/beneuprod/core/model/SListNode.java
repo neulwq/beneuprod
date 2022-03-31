@@ -12,16 +12,21 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-public class SingleLinkedListNode<T extends Comparable<T>> {
+public class SListNode<T extends Comparable<T>> implements Comparable<SListNode<T>> {
 
     /** 节点的值 **/
     protected T value;
 
     /** next节点 */
-    protected transient SingleLinkedListNode<T> next;
+    protected transient SListNode<T> next;
 
     /** 构造函数 */
-    public SingleLinkedListNode(T value) {
+    public SListNode(T value) {
         this.value = value;
+    }
+
+    @Override
+    public int compareTo(SListNode<T> listNode) {
+        return value.compareTo(listNode.value);
     }
 }
