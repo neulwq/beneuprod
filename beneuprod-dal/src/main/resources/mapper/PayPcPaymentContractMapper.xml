@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace：命名空间，用于隔离sql，还有一个很重要的作用，Mapper动态代理开发的时候使用，需要指定Mapper的类路径 -->
+<mapper namespace="com.beneu.beneuprod.dal.dao.PayPcPaymentContractDao">
+
+    <sql id="selectFieldSQL">
+        select
+            id id,
+            payment_no paymentNo,
+            trade_no tradeNo,
+            trade_event_no tradeEventNo,
+            out_trade_no outTradeNo,
+            relation_no relationNo,
+            state state,
+            biz_type bizType,
+            biz_action bizAction,
+            pay_amount payAmount,
+            currency currency,
+            finished_time finishedTime,
+            env env,
+            tags tags,
+            create_time createTime,
+            modify_time modifyTime,
+            extend_field extendField,
+            attachment attachment
+    </sql>
+
+    <select id="selectList" parameterType="map" resultType="com.beneu.beneuprod.dal.entity.PayPcPaymentContractDo">
+        <include refid="selectFieldSQL"/>
+        FROM pay_pc_payment_contract
+        <where>
+            <if test="id != null">
+                AND id = #{id, jdbcType=INTEGER}
+            </if>
+            <if test="paymentNo != null and paymentNo != ''">
+                AND payment_no = #{paymentNo, jdbcType=VARCHAR}
+            </if>
+            <if test="tradeNo != null and tradeNo != ''">
+                AND trade_no = #{tradeNo, jdbcType=VARCHAR}
+            </if>
+            <if test="tradeEventNo != null and tradeEventNo != ''">
+                AND trade_event_no = #{tradeEventNo, jdbcType=VARCHAR}
+            </if>
+            <if test="outTradeNo != null and outTradeNo != ''">
+                AND out_trade_no = #{outTradeNo, jdbcType=VARCHAR}
+            </if>
+            <if test="relationNo != null and relationNo != ''">
+                AND relation_no = #{relationNo, jdbcType=VARCHAR}
+            </if>
+            <if test="state != null and state != ''">
+                AND state = #{state, jdbcType=VARCHAR}
+            </if>
+            <if test="bizType != null and bizType != ''">
+                AND biz_type = #{bizType, jdbcType=VARCHAR}
+            </if>
+            <if test="bizAction != null and bizAction != ''">
+                AND biz_action = #{bizAction, jdbcType=VARCHAR}
+            </if>
+            <if test="payAmount != null">
+                AND pay_amount = #{payAmount, jdbcType=INTEGER}
+            </if>
+            <if test="currency != null and currency != ''">
+                AND currency = #{currency, jdbcType=VARCHAR}
+            </if>
+            <if test="finishedTime != null">
+                AND finished_time = #{finishedTime, jdbcType=TIMESTAMP}
+            </if>
+            <if test="env != null and env != ''">
+                AND env = #{env, jdbcType=VARCHAR}
+            </if>
+            <if test="tags != null and tags != ''">
+                AND tags = #{tags, jdbcType=VARCHAR}
+            </if>
+            <if test="attachment != null and attachment != ''">
+                AND attachment = #{attachment, jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+</mapper>

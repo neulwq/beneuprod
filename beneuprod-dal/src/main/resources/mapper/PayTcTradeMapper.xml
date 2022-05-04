@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace：命名空间，用于隔离sql，还有一个很重要的作用，Mapper动态代理开发的时候使用，需要指定Mapper的类路径 -->
+<mapper namespace="com.beneu.beneuprod.dal.dao.PayTcTradeDao">
+
+    <sql id="selectFieldSQL">
+        select
+            id id,
+            trade_no tradeNo,
+            main_event_no mainEventNo,
+            out_trade_no outTradeNo,
+            sub_out_trade_no subOutTradeNo,
+            biz_prod bizProd,
+            biz_mode bizMode,
+            trade_type tradeType,
+            state state,
+            settle_state settleState,
+            total_amount totalAmount,
+            pay_amount payAmount,
+            refund_amount refundAmount,
+            refunding_amount refundingAmount,
+            settle_amount settleAmount,
+            settling_amount settlingAmount,
+            shared_amount sharedAmount,
+            sharing_amount sharingAmount,
+            refund_shared_amount refundSharedAmount,
+            refund_sharing_amount refundSharingAmount,
+            currency currency,
+            partner_id partnerId,
+            payee_id payeeId,
+            payer_id payerId,
+            settle_time settleTime,
+            close_time closeTime,
+            expire_time expireTime,
+            env env,
+            tags tags,
+            create_time createTime,
+            modify_time modifyTime,
+            extend_field extendField,
+            attachment attachment
+    </sql>
+
+    <select id="selectList" parameterType="map" resultType="com.beneu.beneuprod.dal.entity.PayTcTradeDo">
+        <include refid="selectFieldSQL"/>
+        FROM pay_tc_trade
+        <where>
+            <if test="id != null">
+                AND id = #{id, jdbcType=INTEGER}
+            </if>
+            <if test="tradeNo != null and tradeNo != ''">
+                AND trade_no = #{tradeNo, jdbcType=VARCHAR}
+            </if>
+            <if test="mainEventNo != null and mainEventNo != ''">
+                AND main_event_no = #{mainEventNo, jdbcType=VARCHAR}
+            </if>
+            <if test="outTradeNo != null and outTradeNo != ''">
+                AND out_trade_no = #{outTradeNo, jdbcType=VARCHAR}
+            </if>
+            <if test="subOutTradeNo != null and subOutTradeNo != ''">
+                AND sub_out_trade_no = #{subOutTradeNo, jdbcType=VARCHAR}
+            </if>
+            <if test="bizProd != null and bizProd != ''">
+                AND biz_prod = #{bizProd, jdbcType=VARCHAR}
+            </if>
+            <if test="bizMode != null and bizMode != ''">
+                AND biz_mode = #{bizMode, jdbcType=VARCHAR}
+            </if>
+            <if test="tradeType != null and tradeType != ''">
+                AND trade_type = #{tradeType, jdbcType=VARCHAR}
+            </if>
+            <if test="state != null and state != ''">
+                AND state = #{state, jdbcType=VARCHAR}
+            </if>
+            <if test="settleState != null and settleState != ''">
+                AND settle_state = #{settleState, jdbcType=VARCHAR}
+            </if>
+            <if test="totalAmount != null">
+                AND total_amount = #{totalAmount, jdbcType=INTEGER}
+            </if>
+            <if test="payAmount != null">
+                AND pay_amount = #{payAmount, jdbcType=INTEGER}
+            </if>
+            <if test="refundAmount != null">
+                AND refund_amount = #{refundAmount, jdbcType=INTEGER}
+            </if>
+            <if test="refundingAmount != null">
+                AND refunding_amount = #{refundingAmount, jdbcType=INTEGER}
+            </if>
+            <if test="settleAmount != null">
+                AND settle_amount = #{settleAmount, jdbcType=INTEGER}
+            </if>
+            <if test="settlingAmount != null">
+                AND settling_amount = #{settlingAmount, jdbcType=INTEGER}
+            </if>
+            <if test="sharedAmount != null">
+                AND shared_amount = #{sharedAmount, jdbcType=INTEGER}
+            </if>
+            <if test="sharingAmount != null">
+                AND sharing_amount = #{sharingAmount, jdbcType=INTEGER}
+            </if>
+            <if test="refundSharedAmount != null">
+                AND refund_shared_amount = #{refundSharedAmount, jdbcType=INTEGER}
+            </if>
+            <if test="refundSharingAmount != null">
+                AND refund_sharing_amount = #{refundSharingAmount, jdbcType=INTEGER}
+            </if>
+            <if test="currency != null and currency != ''">
+                AND currency = #{currency, jdbcType=VARCHAR}
+            </if>
+            <if test="partnerId != null and partnerId != ''">
+                AND partner_id = #{partnerId, jdbcType=VARCHAR}
+            </if>
+            <if test="payeeId != null and payeeId != ''">
+                AND payee_id = #{payeeId, jdbcType=VARCHAR}
+            </if>
+            <if test="payerId != null and payerId != ''">
+                AND payer_id = #{payerId, jdbcType=VARCHAR}
+            </if>
+            <if test="settleTime != null">
+                AND settle_time = #{settleTime, jdbcType=TIMESTAMP}
+            </if>
+            <if test="closeTime != null">
+                AND close_time = #{closeTime, jdbcType=TIMESTAMP}
+            </if>
+            <if test="expireTime != null">
+                AND expire_time = #{expireTime, jdbcType=TIMESTAMP}
+            </if>
+            <if test="env != null and env != ''">
+                AND env = #{env, jdbcType=VARCHAR}
+            </if>
+            <if test="tags != null and tags != ''">
+                AND tags = #{tags, jdbcType=VARCHAR}
+            </if>
+            <if test="attachment != null and attachment != ''">
+                AND attachment = #{attachment, jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+</mapper>

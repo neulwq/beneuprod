@@ -20,10 +20,29 @@ import java.util.Random;
 @Slf4j
 public class ArraySortTest {
 
-    /**
-     * 排序的数组
-     */
-    static Integer[] data = buildArray();
+    /** 排序数组大小 */
+    final static int data_length = 64;
+
+    /** 数据最大值 */
+    final static int MAX_VALUE = 100;
+
+    /** 排序的数组 */
+    final static Integer[] data = buildArray();
+
+
+
+    @Test
+    public void testHeapSort() {
+        Integer[] dataCopy = Arrays.copyOf(data, data.length);
+        Arrays.sort(dataCopy);
+        String sortResult = Arrays.toString(dataCopy);
+
+        dataCopy = Arrays.copyOf(data, data.length);
+        SortService<Integer> sortService = new HeapSortServiceImpl<>();
+        sortService.sort(dataCopy);
+        log.info(Arrays.toString(dataCopy));
+        Assert.assertEquals(Arrays.toString(dataCopy), sortResult);
+    }
 
     @Test
     public void testQuickSort() {
@@ -128,10 +147,10 @@ public class ArraySortTest {
      * @return
      */
     protected static Integer[] buildArray() {
-        Integer[] array = new Integer[16];
+        Integer[] array = new Integer[data_length];
         Random random = new Random();
         for (int i = 0; i < array.length; i++) {
-            array[i] = random.nextInt(100);
+            array[i] = random.nextInt(MAX_VALUE);
         }
         log.info("source array=" + Arrays.toString(array));
         return array;
