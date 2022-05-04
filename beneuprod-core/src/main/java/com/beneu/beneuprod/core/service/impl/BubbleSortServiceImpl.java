@@ -9,6 +9,7 @@ package com.beneu.beneuprod.core.service.impl;
  */
 public class BubbleSortServiceImpl<T extends Comparable<T>> extends BaseSortService<T>  {
 
+    /** [begin,end] */
     @Override
     public void sort(T[] data, int begin, int end) {
         //第一趟进行N-1次比较

@@ -18,7 +18,7 @@ public interface SortService<T extends Comparable<T>> {
     public void sort(T[] data);
 
     /**
-     * 排序数组指定位置范围
+     * 排序数组指定位置范围[begin,end]
      *
      * @param data
      * @param begin
