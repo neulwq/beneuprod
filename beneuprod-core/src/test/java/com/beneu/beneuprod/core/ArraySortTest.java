@@ -2,6 +2,8 @@ package com.beneu.beneuprod.core;
 
 import com.beneu.beneuprod.core.service.SortService;
 import com.beneu.beneuprod.core.service.impl.*;
+import com.beneu.beneuprod.core.service.virtual.impl.VirtualBubbleSortServiceImpl;
+import com.beneu.beneuprod.core.service.virtual.impl.VirtualHeapSortServiceImpl;
 import com.beneu.beneuprod.util.ArrayMergeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
@@ -39,6 +41,14 @@ public class ArraySortTest {
 
         dataCopy = Arrays.copyOf(data, data.length);
         SortService<Integer> sortService = new HeapSortServiceImpl<>();
+        sortService.sort(dataCopy);
+        log.info(Arrays.toString(dataCopy));
+        Assert.assertEquals(Arrays.toString(dataCopy), sortResult);
+
+
+
+        dataCopy = Arrays.copyOf(data, data.length);
+        sortService = new VirtualHeapSortServiceImpl<>();
         sortService.sort(dataCopy);
         log.info(Arrays.toString(dataCopy));
         Assert.assertEquals(Arrays.toString(dataCopy), sortResult);
@@ -125,6 +135,13 @@ public class ArraySortTest {
         dataCopy = Arrays.copyOf(data, data.length);
         //选择排序实现
         SortService<Integer> sortService = new BubbleSortServiceImpl<>();
+        sortService.sort(dataCopy);
+        log.info(Arrays.toString(dataCopy));
+        Assert.assertEquals(Arrays.toString(dataCopy), sortResult);
+
+        dataCopy = Arrays.copyOf(data, data.length);
+        //选择排序实现
+        sortService = new VirtualBubbleSortServiceImpl<>();
         sortService.sort(dataCopy);
         log.info(Arrays.toString(dataCopy));
         Assert.assertEquals(Arrays.toString(dataCopy), sortResult);

@@ -18,7 +18,7 @@ public class InsertSortServiceImpl<T extends Comparable<T>> extends BaseSortServ
     }
 
     /**
-     * 将data[insert]插入到[begin, insert)中，其中[begin, i)有序
+     * 将data[insert]插入到[begin, insert)中，其中[begin, insert)有序
      *
      * @param data
      * @param begin

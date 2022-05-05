@@ -34,8 +34,8 @@ public class BeneuPriorityQueue<T extends Comparable<T>> {
         int index = size;
         ++size;
 
+        Comparable<T> addVal = (Comparable<T>) t;
         while (index > 0) {
-            Comparable<T> addVal = (Comparable<T>) t;
             int parent = (index - 1) >> 1;
             if (addVal.compareTo((T)array[parent]) >= 0) {
                 break;
@@ -50,10 +50,12 @@ public class BeneuPriorityQueue<T extends Comparable<T>> {
 
     /** 返回队列头部元素，并重新构造队列 */
     public T poll() {
+        //队列为空
         if (size == 0) {
             return null;
         }
         T result = (T) array[0];
+        //清空尾节点
         T tail = (T) array[size - 1];
         array[size - 1] = null;
         --size;
