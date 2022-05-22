@@ -18,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
+import java.util.Random;
 
 @Slf4j
 @SpringBootTest
@@ -38,50 +39,59 @@ public class PayBizTest {
 
     @Test
     public void testPayBiz() {
-        PayTcTradeModel payTcTradeModel = genePayTcTradeModel();
-        payTcTradeRepository.insert(payTcTradeModel);
+        for (int i = 0; i < 50000; ++i) {
+            PayTcTradeModel payTcTradeModel = genePayTcTradeModel();
+            payTcTradeRepository.insert(payTcTradeModel);
 
-        PayTcTradeModel payTcTradeModelQuery = payTcTradeRepository.selectById(payTcTradeModel.getId());
-        LoggerFormatUtil.info(log, "payTcTradeModel={0}", payTcTradeModel);
-        LoggerFormatUtil.info(log, "payTcTradeModelQuery={0}", payTcTradeModelQuery);
+            PayTcTradeModel payTcTradeModelQuery = payTcTradeRepository.selectById(payTcTradeModel.getId());
+            //LoggerFormatUtil.info(log, "payTcTradeModel={0}", payTcTradeModel);
+            LoggerFormatUtil.info(log, "payTcTradeModelQuery={0}", payTcTradeModelQuery);
 
-        PayTcTradeEventModel payTcTradeEventModel = genePayTcTradeEventModel(payTcTradeModelQuery);
-        payTcTradeEventRepository.insert(payTcTradeEventModel);
-        PayTcTradeEventModel quryEventModel = payTcTradeEventRepository.selectById(payTcTradeEventModel.getId());
+            PayTcTradeEventModel payTcTradeEventModel = genePayTcTradeEventModel(payTcTradeModelQuery);
+            payTcTradeEventRepository.insert(payTcTradeEventModel);
+            PayTcTradeEventModel quryEventModel = payTcTradeEventRepository.selectById(payTcTradeEventModel.getId());
 
-        LoggerFormatUtil.info(log, "payTcTradeEventModel={0}", payTcTradeEventModel);
-        LoggerFormatUtil.info(log, "quryEventModel={0}", quryEventModel);
+            //LoggerFormatUtil.info(log, "payTcTradeEventModel={0}", payTcTradeEventModel);
+            LoggerFormatUtil.info(log, "quryEventModel={0}", quryEventModel);
 
 
-        PayPcPaymentContractModel contractModel = genePayPcPaymentContractModel(quryEventModel);
-        payPcPaymentContractRepository.insert(contractModel);
-        PayPcPaymentContractModel queryContractModel = payPcPaymentContractRepository.selectById(contractModel.getId());
-        LoggerFormatUtil.info(log, "contractModel={0}", contractModel);
-        LoggerFormatUtil.info(log, "queryContractModel={0}", queryContractModel);
+            PayPcPaymentContractModel contractModel = genePayPcPaymentContractModel(quryEventModel);
+            payPcPaymentContractRepository.insert(contractModel);
+            PayPcPaymentContractModel queryContractModel = payPcPaymentContractRepository.selectById(contractModel.getId());
+            //LoggerFormatUtil.info(log, "contractModel={0}", contractModel);
+            LoggerFormatUtil.info(log, "queryContractModel={0}", queryContractModel);
 
-        PayPcPaymentDetailModel paymentDetailModel = genePayPcPaymentDetailModel(quryEventModel, contractModel);
-        payPcPaymentDetailRepository.insert(paymentDetailModel);
-        PayPcPaymentDetailModel queryPaymentDetailModel = payPcPaymentDetailRepository.selectById(paymentDetailModel.getId());
+            PayPcPaymentDetailModel paymentDetailModel = genePayPcPaymentDetailModel(quryEventModel, contractModel);
+            payPcPaymentDetailRepository.insert(paymentDetailModel);
+            PayPcPaymentDetailModel queryPaymentDetailModel = payPcPaymentDetailRepository.selectById(paymentDetailModel.getId());
 
-        LoggerFormatUtil.info(log, "paymentDetailModel={0}", paymentDetailModel);
-        LoggerFormatUtil.info(log, "queryPaymentDetailModel={0}", queryPaymentDetailModel);
-
+            //LoggerFormatUtil.info(log, "paymentDetailModel={0}", paymentDetailModel);
+            LoggerFormatUtil.info(log, "queryPaymentDetailModel={0}", queryPaymentDetailModel);
+        }
     }
+
+    protected String[] bizProds = new String[]{"1005", "1006", "1007"};
+    protected String[] bizModes = new String[]{"001", "002", "003", "004"};
+    protected String[] partnerIds = new String[]{"80001230058", "80001230059", "80001230060"};
+    protected String[] payeeIds = new String[]{"2783290779", "2793290779", "2803290779", "2813290779", "2823290779"};
+
+    protected String[] payChannelApis = new String[]{"90010001", "90010003", "90020002", "90020004", "9002"};
+    Random random = new Random();
 
     protected PayTcTradeModel genePayTcTradeModel() {
         PayTcTradeModel payTcTradeModel = new PayTcTradeModel();
         payTcTradeModel.setTradeNo(BizCodeUtil.geneTradeno());
         payTcTradeModel.setOutTradeNo(BizCodeUtil.geneOrderNo());
-        payTcTradeModel.setBizProd("1005");
-        payTcTradeModel.setBizMode("001");
+        payTcTradeModel.setBizProd(bizProds[random.nextInt(bizProds.length)]);
+        payTcTradeModel.setBizMode(bizModes[random.nextInt(bizModes.length)]);
         payTcTradeModel.setTradeType("PAY");
         payTcTradeModel.setState("4");
         payTcTradeModel.setSettleState("0");
         payTcTradeModel.setTotalAmount(100L);
         payTcTradeModel.setPayAmount(100L);
         payTcTradeModel.setCurrency("CNY");
-        payTcTradeModel.setPartnerId("80001230058");
-        payTcTradeModel.setPayeeId("2783290777");
+        payTcTradeModel.setPartnerId(partnerIds[random.nextInt(partnerIds.length)]);
+        payTcTradeModel.setPayeeId(payeeIds[random.nextInt(payeeIds.length)]);
         payTcTradeModel.setPayerId(String.valueOf(System.currentTimeMillis()));
         payTcTradeModel.setExpireTime(new Date());
         payTcTradeModel.setEnv("PROD");
@@ -104,7 +114,7 @@ public class PayBizTest {
         payTcTradeEventModel.setTotalAmount(payTcTradeModel.getTotalAmount());
         payTcTradeEventModel.setRealAmount(payTcTradeModel.getPayAmount());
         payTcTradeEventModel.setEventType("PAY");
-        payTcTradeEventModel.setCurrency("CNY");
+        payTcTradeEventModel.setCurrency(payTcTradeModel.getCurrency());
         payTcTradeEventModel.setPartnerId(payTcTradeModel.getPartnerId());
         payTcTradeEventModel.setPayeeId(payTcTradeModel.getPayeeId());
         payTcTradeEventModel.setPayerId(payTcTradeModel.getPayerId());
@@ -146,7 +156,7 @@ public class PayBizTest {
         paymentDetailModel.setTradeNo(eventModel.getTradeNo());
         paymentDetailModel.setTradeEventNo(eventModel.getTradeEventNo());
         paymentDetailModel.setState("4");
-        paymentDetailModel.setPayChannelApi("90010001");
+        paymentDetailModel.setPayChannelApi(payChannelApis[random.nextInt(payChannelApis.length)]);
         paymentDetailModel.setAmount(eventModel.getRealAmount());
         paymentDetailModel.setCurrency(eventModel.getCurrency());
         paymentDetailModel.setPartnerId(eventModel.getPartnerId());
