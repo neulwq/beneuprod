@@ -52,20 +52,18 @@ public class VirtualHeapSortServiceImpl<T extends Comparable<T>> extends BaseSor
             if (size >= array.length) {
                 throw new UnsupportedOperationException("队列已满");
             }
-
-            //定义待插入的索引
             int index = size;
-            Comparable<T> iVal = (Comparable<T>)t;
+            ++size;
+
+            Comparable<T> addVal = (Comparable<T>)t;
             while (index > 0) {
-                //index 的父节点 #(parent + 1) * 2 - 1 = index
                 int parent = (index - 1) >> 1;
-                if (iVal.compareTo((T)array[parent]) >= 0) {
+                if (addVal.compareTo((T)array[parent]) > 0) {
                     break;
                 }
                 array[index] = array[parent];
                 index = parent;
             }
-            ++size;
             array[index] = t;
             return true;
         }
