@@ -39,7 +39,7 @@ public class PayBizTest {
 
     @Test
     public void testPayBiz() {
-        for (int i = 0; i < 50000; ++i) {
+        for (int i = 0; i < 50; ++i) {
             PayTcTradeModel payTcTradeModel = genePayTcTradeModel();
             payTcTradeRepository.insert(payTcTradeModel);
 
@@ -99,6 +99,7 @@ public class PayBizTest {
         payTcTradeModel.setModifyTime(new Date());
         payTcTradeModel.getExtendField().put("order_no", payTcTradeModel.getOutTradeNo());
         payTcTradeModel.getAttachment().put("bizProd", payTcTradeModel.getBizProd());
+        payTcTradeModel.getAttachment().put("src", "ubuntu");
         return payTcTradeModel;
     }
 
