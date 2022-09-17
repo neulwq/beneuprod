@@ -40,6 +40,10 @@ public class PayBizTest {
     @Test
     public void testPayBiz() {
         for (int i = 0; i < 50; ++i) {
+            LoggerFormatUtil.info(log, "{0} BinaryString is {1} ", i, Integer.toBinaryString(i));
+            LoggerFormatUtil.info(log, "{0} BinaryString is {1} ", -i, Integer.toBinaryString(-i));
+        }
+        for (int i = 0; i < 50; ++i) {
             PayTcTradeModel payTcTradeModel = genePayTcTradeModel();
             payTcTradeRepository.insert(payTcTradeModel);
 
